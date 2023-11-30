@@ -1,0 +1,81 @@
+#cloud-config
+disable_root: false
+hostname: liyi-linux
+ssh_pwauth: false
+users:
+  - name: liyi
+    groups: sudo
+    passwd: $6$xANsKi6P9WIabL1Z$BbTK6yrVJbNSc0OTbRtIjpvPdJHGFv.cm2wPVOPJuS2ysdwKVKEAtB6GRjiOn/sf0vjizhYEQ8A8qLUSiFwDI.
+    lock_passwd: false
+    shell: /bin/zsh
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDCMXSakoFcF1EjZ4H0W13LlF3ZXFE7a6+u3vt5+8bW9u54n4Q4R6GJaroKC7gCCRcwJWhIpar85CBXmmNMYGN/blf6pVo6QaXawaDhi5gIJFazdScPnzKG5QndIOEOvGJfLCRqMRby4e17EJPBE4URIGTmuo9LP744LD23dA6JWwOfV/dMGXS/g2Lwiw74qzw/nM6A1QtKf/QCT2Wds27j+2471+Jiaf+xBctXrjh0NoY1ldLl6BrhsF81HRosOfQhsCzqq0rrt+ER874z9N7Yyk0ZVf1i5Hp5NdiCuSwTlEd2COz3oVIh8RwCeXlcr22qvDEgbgF5Xkk/wRJ8CRPd
+package_update: true
+packages:
+  - termshark
+  - git
+  - curl
+  - xorg
+  - openbox
+  - tmux
+  - zsh
+  - podman
+  - vim
+  - jq
+  - yq
+  - tmate
+
+runcmd:
+  - git clone git@github.com:liyihuang/liyi-cloudinit.git /home/liyi/ 
+  - echo "force download oh my tmux and link the config"
+  - rm -rf /home/liyi/.tmux > /dev/null
+  - git clone https://github.com/gpakosz/.tmux.git /home/liyi/.tmux
+  - ln -s -f /home/liyi/.tmux/.tmux.conf /home/liyi/.tmux.conf
+  - ln -s -f /home/liyi/liyi-cloudinit/tmux.conf.local /home/liyi/.tmux.conf.local
+
+  - echo "force download the vim config and link the config"
+  - rm -rf /home/liyi/.vim_runtime > /dev/null
+  - git clone --depth=1 https://github.com/amix/vimrc.git /home/liyi/.vim_runtime
+  - sh /home/liyi/.vim_runtime/install_awesome_vimrc.sh
+  - ln -s -f /home/liyi/liyi-cloudinit/my_configs.vim /home/liyi/.vim_runtime/my_configs.vim
+  
+  - echo "force link the gitconfig"
+  - rm /home/liyi/.gitignore > /dev/null
+  - ln -s -f /home/liyi/liyi-cloudinit/global_gitignore /home/liyi/.gitignore
+  - rm /home/liyi/.gitconfig > /dev/null
+  - ln -s -f /home/liyi/liyi-cloudinit/gitconfig /home/liyi/.gitconfig
+  - echo "copy the zshrc if it doesn't exsit"
+  - cp -n /home/liyi/liyi-cloudinit/zshrc /home/liyi/.zshrc
+  - rm -rf /home/liyi/.oh-my-zsh > /dev/null
+  - echo "download oh my zsh"
+  - sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+  - echo "Installing Kubectl(copy and paste from https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)"
+  - sudo apt-get update && sudo apt-get install -y apt-transport-https ca-certificates curl
+  - curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+  - echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+  - sudo apt-get install -y kubectl
+  - echo "installing terraform (copy and paste from https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)" 
+  - sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
+  - wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+  - echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+  - sudo apt update
+  - sudo apt-get install terraform
+
+  - echo "installing the kubectx"
+  - sudo curl -o /usr/local/bin/kubectx -L https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx
+  - sudo curl -o /usr/local/bin/kubens -L https://raw.githubusercontent.com/ahmetb/kubectx/master/kubens
+  - sudo chmod +x /usr/local/bin/kubectx
+  - sudo chmod +x /usr/local/bin/kubens
+
+  - echo "installing the kubeps1"
+  - curl -o /home/liyi/.kube-ps1.sh -L https://raw.githubusercontent.com/jonmosco/kube-ps1/master/kube-ps1.sh
+  - sudo echo "source ${HOME}/.kube-ps1.sh" >>/home/liyi/.zshrc
+  - sudo echo PROMPT=\'\$\(kube_ps1\)\''$PROMPT' >>/home/liyi/.zshrc
+  - echo "installing the kubechc"
+  - git clone https://github.com/aabouzaid/kubech /home/liyi/.kubech
+  - sudo echo 'source /home/liyi/.kubech/kubech' >> /home/liyi/.zshrc
+  - sudo echo 'source /home/liyi/.kubech/completion/kubech.bash' >> /home/liyi/.zshrc
+  - echo "installing the fzf"
+  - git clone --depth 1 https://github.com/junegunn/fzf.git /home/liyi/.fzf
+  - /home/liyi/.fzf/install
