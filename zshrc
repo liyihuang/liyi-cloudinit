@@ -85,6 +85,7 @@ source $ZSH/oh-my-zsh.sh
 
 # Preferred editor for local and remote sessions
 export EDITOR='vim'
+export FZF_BASE='/usr/bin/fzf'
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -100,3 +101,10 @@ export EDITOR='vim'
 autoload bashcompinit
 bashcompinit
 
+alias cilium_helm_install='helm upgrade -n kube-system cilium-enterprise isovalent/cilium-enterprise --version 1.13.3'
+alias cilium_command=' kubectl -n kube-system exec ds/cilium -- cilium'
+alias cilium_restart='kubectl rollout restart deployment cilium-operator -n kube-system; kubectl rollout restart ds/cilium -n kube-system'
+alias cilium_agent_log='kubectl logs -l app.kubernetes.io/name=cilium-agent -n kube-system --tail=999'
+alias cilium_operator_log='kubectl logs -l app.kubernetes.io/name=cilium-operator -n kube-system --tail=999'
+alias nginx_deployment='kubectl create deployment nginx --image=nginx --replicas=10'
+alias keof='cat <<EOF | kubectl apply -f -'
