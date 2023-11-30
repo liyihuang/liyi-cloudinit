@@ -72,6 +72,8 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
+export EDITOR='vim'
+export FZF_BASE='/usr/bin/fzf'
 plugins=(git kubectl tmux fzf)
 
 source $ZSH/oh-my-zsh.sh
@@ -84,8 +86,6 @@ source $ZSH/oh-my-zsh.sh
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-export EDITOR='vim'
-export FZF_BASE='/usr/bin/fzf'
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
