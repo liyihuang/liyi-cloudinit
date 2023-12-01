@@ -34,11 +34,11 @@ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 echo "installing the kubeps1"
 rm -rf ~/.kube-ps1.sh
 curl -o ~/.kube-ps1.sh -L https://raw.githubusercontent.com/jonmosco/kube-ps1/master/kube-ps1.sh
-sudo echo "source ~/.kube-ps1.sh" >>~/.zshrc
-sudo echo PROMPT=\'\$\(kube_ps1\)\''$PROMPT' >>~/.zshrc
+echo "source ~/.kube-ps1.sh" >>~/.zshrc
+echo PROMPT=\'\$\(kube_ps1\)\''$PROMPT' >>~/.zshrc
 
 echo "installing the kubechc"
 rm -rf  ~/.kubech 
 git clone https://github.com/aabouzaid/kubech ~/.kubech
-sudo echo 'source ~/.kubech/kubech' >> ~/.zshrc
-sudo echo 'source ~/.kubech/completion/kubech.bash' >> ~/.zshrc
+echo 'source ~/.kubech/kubech' >> ~/.zshrc
+echo 'source ~/.kubech/completion/kubech.bash' >> ~/.zshrc
