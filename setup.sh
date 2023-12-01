@@ -15,14 +15,14 @@ sh ~/.vim_runtime/install_awesome_vimrc.sh
 ln -s -f ~/liyi-cloudinit/my_configs.vim ~/.vim_runtime/my_configs.vim
   
 echo "force link the gitconfig"
-rm ~/.gitignore > /dev/null
+rm -rf ~/.gitignore > /dev/null
 ln -s -f ~/liyi-cloudinit/global_gitignore ~/.gitignore
-rm ~/.gitconfig > /dev/null
+rm -rf ~/.gitconfig > /dev/null
 ln -s -f ~/liyi-cloudinit/gitconfig ~/.gitconfig
 
 echo "download oh my zsh"
 rm -rf ~/.oh-my-zsh > /dev/null
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/coreycole/oh-my-zsh/master/tools/install.sh)" --unattended
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 ln -s -f ~/liyi-cloudinit/zshrc ~/.zshrc
 
 echo "install fzf"

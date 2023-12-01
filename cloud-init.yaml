@@ -47,6 +47,11 @@ runcmd:
   - sudo tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz /usr/local/bin
   - rm cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
 
+  - echo "installing the kubecm"
+  - curl -Lo kubecm.tar.gz https://github.com/sunny0826/kubecm/releases/download/v0.25.0/kubecm_v0.25.0_Linux_arm64.tar.gz
+  - tar -zxvf kubecm.tar.gz kubecm
+  - sudo mv kubecm /usr/local/bin/
+  
   - echo "download cloudinit from github"
   - git clone https://github.com/liyihuang/liyi-cloudinit.git /home/liyi/liyi-cloudinit
   - chown -R liyi:liyi /home/liyi/liyi-cloudinit
