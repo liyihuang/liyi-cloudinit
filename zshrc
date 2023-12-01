@@ -73,7 +73,6 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 export EDITOR='vim'
-export FZF_BASE='/usr/bin/fzf'
 plugins=(git kubectl tmux fzf)
 
 source $ZSH/oh-my-zsh.sh
