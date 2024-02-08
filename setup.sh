@@ -2,6 +2,67 @@
 
 set -euo pipefail
 
+echo "installing the kubectx"
+sudo snap install kubectx --classic
+
+echo "installing the docker"
+sudo snap install docker
+sudo addgroup --system docker
+sudo adduser liyi docker
+newgrp docker
+sudo snap disable docker
+sudo snap enable docker
+
+echo "Installing Kubectl(copy and paste from https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)"
+sudo snap install kubectl --classic
+
+echo "installing terraform (copy and paste from https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)" 
+sudo snap install terraform --classic
+
+echo "installaing the helm"
+sudo snap install helm --classic
+
+echo "installing the cilium CLI"
+CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable.txt)
+CLI_ARCH=amd64
+if [ "$(uname -m)" = "aarch64" ]; then CLI_ARCH=arm64; fi
+curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-${CLI_ARCH}.tar.gz
+sudo tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz /usr/local/bin
+rm cilium-linux-${CLI_ARCH}.tar.gz
+
+echo "installing the hubble"
+
+HUBBLE_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/hubble/master/stable.txt)
+HUBBLE_ARCH=amd64
+if [ "$(uname -m)" = "aarch64" ]; then HUBBLE_ARCH=arm64; fi
+curl -L --fail --remote-name-all https://github.com/cilium/hubble/releases/download/${HUBBLE_VERSION}/hubble-linux-${HUBBLE_ARCH}.tar.gz
+sudo tar xzvfC hubble-linux-${HUBBLE_ARCH}.tar.gz /usr/local/bin
+rm hubble-linux-${HUBBLE_ARCH}.tar.gz
+
+
+echo "installing the kubecm"
+curl -Lo /tmp/kubecm.tar.gz https://github.com/sunny0826/kubecm/releases/download/v0.25.0/kubecm_v0.25.0_Linux_x86_64.tar.gz
+tar -zxvf /tmp/kubecm.tar.gz kubecm
+sudo mv kubecm /usr/local/bin/
+rm -rf /tmp/kubecm.tar.gz
+  
+echo "installing pulumi"
+curl -fsSL https://get.pulumi.com | sh
+
+echo "installing the github gh cli"
+type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+sudo apt update && sudo apt install gh -y
+
+echo "installing syncthing"
+sudo mkdir -p /etc/apt/keyrings
+sudo curl -L -o /etc/apt/keyrings/syncthing-archive-keyring.gpg https://syncthing.net/release-key.gpg
+echo "deb [signed-by=/etc/apt/keyrings/syncthing-archive-keyring.gpg] https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list
+sudo apt-get update && sudo apt-get install syncthing
+syncthing generate | grep Device | awk -F ": " '{print $3}'
+systemctl enable syncthing@liyi.service
+systemctl start syncthing@liyi.service
+
 echo "force download oh my tmux and link the config"
 rm -rf ~/.tmux > /dev/null
 git clone https://github.com/gpakosz/.tmux.git ~/.tmux
