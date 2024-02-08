@@ -62,8 +62,8 @@ sudo apt-get update && sudo apt-get install syncthing
 sync_id=$(syncthing generate | grep Device | awk -F ": " '{print $3}')
 sudo systemctl enable syncthing@liyi.service
 sudo systemctl start syncthing@liyi.service
-while ! nc -z 127.0.0.1 8384; do
-    echo "Waiting for syncthing to be available..."
+while ! (curl -s 127.0.0.1:8384 >/dev/null); do
+    echo "Waiting for Syncthing to be available..."
     sleep 1
 done
 
