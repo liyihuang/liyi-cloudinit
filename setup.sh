@@ -16,7 +16,7 @@ sudo snap enable docker
 echo "Installing Kubectl(copy and paste from https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)"
 sudo snap install kubectl --classic
 
-echo "installing terraform (copy and paste from https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)" 
+echo "installing terraform (copy and paste from https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)"
 sudo snap install terraform --classic
 
 echo "installaing the helm"
@@ -45,7 +45,7 @@ curl -Lo /tmp/kubecm.tar.gz https://github.com/sunny0826/kubecm/releases/downloa
 tar -zxvf /tmp/kubecm.tar.gz kubecm
 sudo mv kubecm /usr/local/bin/
 rm -rf /tmp/kubecm.tar.gz
-  
+
 echo "installing pulumi"
 curl -fsSL https://get.pulumi.com | sh
 
@@ -64,7 +64,7 @@ sudo systemctl enable syncthing@liyi.service
 sudo systemctl start syncthing@liyi.service
 syncthing cli config devices add --device-id 3K5VECH-WKJJUUL-4VZ3D6U-GS47UVB-V6CLDQ3-SVF6FFG-3LXN5IU-QFRLAQZ
 syncthing cli config folders default devices add --device-id 3K5VECH-WKJJUUL-4VZ3D6U-GS47UVB-V6CLDQ3-SVF6FFG-3LXN5IU-QFRLAQZ
-curl -X POST -d "${sync}" http://127.0.0.1:8000/syncid
+curl -X POST -d "${sync_id}" http://127.0.0.1:8000/syncid
 
 echo "force download oh my tmux and link the config"
 rm -rf ~/.tmux > /dev/null
@@ -77,7 +77,7 @@ rm -rf ~/.vim_runtime > /dev/null
 git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
 sh ~/.vim_runtime/install_awesome_vimrc.sh
 ln -s -f ~/liyi-cloudinit/my_configs.vim ~/.vim_runtime/my_configs.vim
-  
+
 echo "force link the gitconfig"
 rm -rf ~/.gitignore > /dev/null
 ln -s -f ~/liyi-cloudinit/global_gitignore ~/.gitignore
@@ -102,7 +102,7 @@ echo "source ~/.kube-ps1.sh" >>~/.zshrc
 echo PROMPT=\'\$\(kube_ps1\)\''$PROMPT' >>~/.zshrc
 
 echo "installing the kubechc"
-rm -rf  ~/.kubech 
+rm -rf  ~/.kubech
 git clone https://github.com/aabouzaid/kubech ~/.kubech
 echo 'source ~/.kubech/kubech' >> ~/.zshrc
 echo 'source ~/.kubech/completion/kubech.bash' >> ~/.zshrc
