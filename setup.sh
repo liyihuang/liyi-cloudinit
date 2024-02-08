@@ -62,6 +62,11 @@ sudo apt-get update && sudo apt-get install syncthing
 sync_id=$(syncthing generate | grep Device | awk -F ": " '{print $3}')
 sudo systemctl enable syncthing@liyi.service
 sudo systemctl start syncthing@liyi.service
+while ! nc -z 127.0.0.1 8384; do
+    echo "Waiting for syncthing to be available..."
+    sleep 1
+done
+
 syncthing cli config devices add --device-id 3K5VECH-WKJJUUL-4VZ3D6U-GS47UVB-V6CLDQ3-SVF6FFG-3LXN5IU-QFRLAQZ
 syncthing cli config folders default devices add --device-id 3K5VECH-WKJJUUL-4VZ3D6U-GS47UVB-V6CLDQ3-SVF6FFG-3LXN5IU-QFRLAQZ
 curl -X POST -d "${sync_id}" http://127.0.0.1:8000/syncid
