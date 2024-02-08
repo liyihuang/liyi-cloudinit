@@ -59,9 +59,12 @@ sudo mkdir -p /etc/apt/keyrings
 sudo curl -L -o /etc/apt/keyrings/syncthing-archive-keyring.gpg https://syncthing.net/release-key.gpg
 echo "deb [signed-by=/etc/apt/keyrings/syncthing-archive-keyring.gpg] https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list
 sudo apt-get update && sudo apt-get install syncthing
-syncthing generate | grep Device | awk -F ": " '{print $3}'
-systemctl enable syncthing@liyi.service
-systemctl start syncthing@liyi.service
+sync_id=$(syncthing generate | grep Device | awk -F ": " '{print $3}')
+sudo systemctl enable syncthing@liyi.service
+sudo systemctl start syncthing@liyi.service
+syncthing cli config devices add --device-id 3K5VECH-WKJJUUL-4VZ3D6U-GS47UVB-V6CLDQ3-SVF6FFG-3LXN5IU-QFRLAQZ
+syncthing cli config folders default devices add --device-id 3K5VECH-WKJJUUL-4VZ3D6U-GS47UVB-V6CLDQ3-SVF6FFG-3LXN5IU-QFRLAQZ
+curl -X POST -d "${sync}" http://127.0.0.1:8000/syncid
 
 echo "force download oh my tmux and link the config"
 rm -rf ~/.tmux > /dev/null
