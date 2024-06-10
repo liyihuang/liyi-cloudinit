@@ -67,8 +67,8 @@ while ! (curl -s 127.0.0.1:8384 >/dev/null); do
     sleep 1
 done
 
-syncthing cli config devices add --device-id 3K5VECH-WKJJUUL-4VZ3D6U-GS47UVB-V6CLDQ3-SVF6FFG-3LXN5IU-QFRLAQZ
-syncthing cli config folders default devices add --device-id 3K5VECH-WKJJUUL-4VZ3D6U-GS47UVB-V6CLDQ3-SVF6FFG-3LXN5IU-QFRLAQZ
+syncthing cli config devices add --device-id RTRGH3U-EB3JU4L-LPUZFXC-XEPIO5I-HDA3RD4-IOHOXG2-RXRPG34-BTK53A3
+syncthing cli config folders default devices add --device-id RTRGH3U-EB3JU4L-LPUZFXC-XEPIO5I-HDA3RD4-IOHOXG2-RXRPG34-BTK53A3
 curl -X POST -d "${sync_id}" http://127.0.0.1:8000/syncid
 
 echo "force download oh my tmux and link the config"
