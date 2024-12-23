@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
 
 echo "installing the kubectx"
 sudo snap install kubectx --classic
@@ -8,7 +7,7 @@ sudo snap install kubectx --classic
 echo "installing the docker"
 sudo snap install docker
 sudo addgroup --system docker
-sudo adduser liyi docker
+sudo adduser liyih docker
 newgrp docker
 sudo snap disable docker
 sudo snap enable docker
@@ -60,8 +59,8 @@ sudo curl -L -o /etc/apt/keyrings/syncthing-archive-keyring.gpg https://syncthin
 echo "deb [signed-by=/etc/apt/keyrings/syncthing-archive-keyring.gpg] https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list
 sudo apt-get update && sudo apt-get install syncthing
 sync_id=$(syncthing generate | grep Device | awk -F ": " '{print $3}')
-sudo systemctl enable syncthing@liyi.service
-sudo systemctl start syncthing@liyi.service
+sudo systemctl enable syncthing@liyih.service
+sudo systemctl start syncthing@liyih.service
 while ! (curl -s 127.0.0.1:8384 >/dev/null); do
     echo "Waiting for Syncthing to be available..."
     sleep 1
