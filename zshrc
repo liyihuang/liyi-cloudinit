@@ -73,7 +73,7 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 export EDITOR='vim'
-plugins=(git kubectl tmux fzf)
+plugins=(git kubectl tmux fzf kube-ps1)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -106,4 +106,19 @@ alias cilium_restart='kubectl rollout restart deployment cilium-operator -n kube
 alias cilium_agent_log='kubectl logs -l app.kubernetes.io/name=cilium-agent -n kube-system --tail=999'
 alias cilium_operator_log='kubectl logs -l app.kubernetes.io/name=cilium-operator -n kube-system --tail=999'
 alias nginx_deployment='kubectl create deployment nginx --image=nginx --replicas=10'
+alias kn='kubectl -n kube-system'
 alias keof='cat <<EOF | kubectl apply -f -'
+PROMPT='$(kube_ps1)'$PROMPT
+source ~/.kubech/kubech
+source ~/.kubech/completion/kubech.bash
+
+# add Pulumi to the PATH
+export PATH=$PATH:/home/liyih/.pulumi/bin
+export PATH=$PATH:/home/liyih/go/bin
+
+[[ -s "/home/liyih/.gvm/scripts/gvm" ]] && source "/home/liyih/.gvm/scripts/gvm"
+
+. "$HOME/.atuin/bin/env"
+
+eval "$(atuin init zsh)"
+source $HOME/.atuin/bin/env
