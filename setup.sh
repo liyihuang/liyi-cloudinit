@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+ENABLE_SYNC=${ENABLE_SYNC:-false}
 
 
 echo "installing the kubectx"
@@ -12,14 +13,17 @@ newgrp docker
 sudo snap disable docker
 sudo snap enable docker
 
-echo "Installing Kubectl(copy and paste from https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)"
+echo "Installing Kubectl"
 sudo snap install kubectl --classic
 
-echo "installing terraform (copy and paste from https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)"
+echo "installing terraform"
 sudo snap install terraform --classic
 
-echo "installaing the helm"
+echo "installing the helm"
 sudo snap install helm --classic
+
+echo "installing the go"
+sudo snap install go --classic
 
 echo "installing the cilium CLI"
 CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable.txt)
@@ -53,22 +57,26 @@ type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
 curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
 sudo apt update && sudo apt install gh -y
 
-echo "installing syncthing"
-sudo mkdir -p /etc/apt/keyrings
-sudo curl -L -o /etc/apt/keyrings/syncthing-archive-keyring.gpg https://syncthing.net/release-key.gpg
-echo "deb [signed-by=/etc/apt/keyrings/syncthing-archive-keyring.gpg] https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list
-sudo apt-get update && sudo apt-get install syncthing
-sync_id=$(syncthing generate | grep Device | awk -F ": " '{print $3}')
-sudo systemctl enable syncthing@liyih.service
-sudo systemctl start syncthing@liyih.service
-while ! (curl -s 127.0.0.1:8384 >/dev/null); do
-    echo "Waiting for Syncthing to be available..."
-    sleep 1
-done
 
-syncthing cli config devices add --device-id RTRGH3U-EB3JU4L-LPUZFXC-XEPIO5I-HDA3RD4-IOHOXG2-RXRPG34-BTK53A3
-syncthing cli config folders default devices add --device-id RTRGH3U-EB3JU4L-LPUZFXC-XEPIO5I-HDA3RD4-IOHOXG2-RXRPG34-BTK53A3
-curl -X POST -d "${sync_id}" http://127.0.0.1:8000/syncid
+if [ "$ENABLE_SYNC" == "true" ]; then
+    echo "installing syncthing"
+    sudo mkdir -p /etc/apt/keyrings
+    sudo curl -L -o /etc/apt/keyrings/syncthing-archive-keyring.gpg https://syncthing.net/release-key.gpg
+    echo "deb [signed-by=/etc/apt/keyrings/syncthing-archive-keyring.gpg] https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list
+    sudo apt-get update && sudo apt-get install syncthing
+    sync_id=$(syncthing generate | grep Device | awk -F ": " '{print $3}')
+    sudo systemctl enable syncthing@liyih.service
+    sudo systemctl start syncthing@liyih.service
+    while ! (curl -s 127.0.0.1:8384 >/dev/null); do
+        echo "Waiting for Syncthing to be available..."
+        sleep 1
+    done
+    syncthing cli config devices add --device-id RTRGH3U-EB3JU4L-LPUZFXC-XEPIO5I-HDA3RD4-IOHOXG2-RXRPG34-BTK53A3
+    syncthing cli config folders default devices add --device-id RTRGH3U-EB3JU4L-LPUZFXC-XEPIO5I-HDA3RD4-IOHOXG2-RXRPG34-BTK53A3
+    curl -X POST -d "${sync_id}" http://127.0.0.1:8000/syncid
+else
+    echo "Syncing is disabled. Set ENABLE_SYNC=true to enable."
+fi
 
 echo "force download oh my tmux and link the config"
 rm -rf ~/.tmux > /dev/null
