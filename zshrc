@@ -108,17 +108,3 @@ alias cilium_operator_log='kubectl logs -l app.kubernetes.io/name=cilium-operato
 alias nginx_deployment='kubectl create deployment nginx --image=nginx --replicas=10'
 alias kn='kubectl -n kube-system'
 alias keof='cat <<EOF | kubectl apply -f -'
-PROMPT='$(kube_ps1)'$PROMPT
-source ~/.kubech/kubech
-source ~/.kubech/completion/kubech.bash
-
-# add Pulumi to the PATH
-export PATH=$PATH:/home/liyih/.pulumi/bin
-export PATH=$PATH:/home/liyih/go/bin
-
-[[ -s "/home/liyih/.gvm/scripts/gvm" ]] && source "/home/liyih/.gvm/scripts/gvm"
-
-. "$HOME/.atuin/bin/env"
-
-eval "$(atuin init zsh)"
-source $HOME/.atuin/bin/env
