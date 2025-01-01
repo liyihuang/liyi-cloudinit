@@ -6,7 +6,10 @@ echo "installing the kubectx"
 sudo snap install kubectx --classic
 
 echo "installing the docker"
-sudo snap install docker
+
+curl -fsSL https://get.docker.com | sudo sh
+
+
 sudo addgroup --system docker
 sudo adduser liyih docker
 newgrp docker
@@ -24,6 +27,9 @@ sudo snap install helm --classic
 
 echo "installing the go"
 sudo snap install go --classic
+echo "export PATH=$PATH:$HOME/go/bin" >>~/.zshrc
+echo "installing kind"
+go install sigs.k8s.io/kind@latest
 
 echo "installing the cilium CLI"
 CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable.txt)
@@ -99,7 +105,7 @@ ln -s -f ~/liyi-cloudinit/gitconfig ~/.gitconfig
 echo "download oh my zsh"
 rm -rf ~/.oh-my-zsh > /dev/null
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-ln -s -f ~/liyi-cloudinit/zshrc ~/.zshrc
+cp -f ~/liyi-cloudinit/zshrc ~/.zshrc
 
 echo "install fzf"
 rm -rf ~/.fzf > /dev/null
@@ -118,3 +124,6 @@ rm -rf  ~/.kubech
 git clone https://github.com/aabouzaid/kubech ~/.kubech
 echo 'source ~/.kubech/kubech' >> ~/.zshrc
 echo 'source ~/.kubech/completion/kubech.bash' >> ~/.zshrc
+
+echo "installing the atuin"
+curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
