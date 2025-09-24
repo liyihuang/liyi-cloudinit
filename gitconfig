@@ -15,3 +15,5 @@
 	directory = /work
 [init]
 	defaultBranch = main
+[pull]
+	rebase = true
