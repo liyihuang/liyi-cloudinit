@@ -5,54 +5,53 @@
   home.homeDirectory = builtins.getEnv "HOME";
   home.stateVersion = "25.05";
   
-  programs.zsh = {
-    enable = true;
-    oh-my-zsh = {
-      enable = true;
-      theme = "simple";
-      plugins = [ "git" "kubectl" "tmux" "fzf" "kube-ps1" ];
-    };
-    
-    shellAliases = {
-      cilium_dbg = "kubectl -n kube-system exec ds/cilium -- cilium-dbg";
-      cilium_restart = "kubectl rollout restart deployment cilium-operator -n kube-system; kubectl rollout restart ds/cilium -n kube-system";
-      nginx_deployment = "kubectl create deployment nginx --image=nginx --replicas=10";
-      kn = "kubectl -n kube-system";
-      keof = "cat <<EOF | kubectl apply -f -";
-    };
-    
-    sessionVariables = {
-      EDITOR = "vim";
-      DISABLE_UNTRACKED_FILES_DIRTY = "true";
-    };
-    
-    initContent = ''
-      ZSH_TMUX_AUTOSTART=true
-      ZSH_TMUX_AUTOQUIT=false
-    '';
-  };
+#  programs.zsh = {
+#    enable = true;
+#    oh-my-zsh = {
+#      enable = true;
+#      theme = "simple";
+#      plugins = [ "git" "kubectl" "tmux" "fzf" "kube-ps1" ];
+#    };
+#    
+#    shellAliases = {
+#      cilium_dbg = "kubectl -n kube-system exec ds/cilium -- cilium-dbg";
+#      cilium_restart = "kubectl rollout restart deployment cilium-operator -n kube-system; kubectl rollout restart ds/cilium -n kube-system";
+#      nginx_deployment = "kubectl create deployment nginx --image=nginx --replicas=10";
+#      kn = "kubectl -n kube-system";
+#      keof = "cat <<EOF | kubectl apply -f -";
+#    };
+#    
+#    sessionVariables = {
+#      EDITOR = "vim";
+#      DISABLE_UNTRACKED_FILES_DIRTY = "true";
+#    };
+#    
+#    initContent = ''
+#      ZSH_TMUX_AUTOSTART=true
+#      ZSH_TMUX_AUTOQUIT=false
+#    '';
+#  };
 
-  programs.git = {
-    enable = true;
-
-    userName = "Liyi Huang";
-    userEmail = "pdshly@gmail.com";
-
-    extraConfig = {
-      color.ui = "auto";
-      core = {
-        editor = "vim";
-        fileMode = false;
-      };
-      credential."https://github.com" = {
-        helper = "!gh auth git-credential";
-      };
-      "oh-my-zsh".hide-dirty = 1;
-      safe.directory = "/work";
-      init.defaultBranch = "main";
-      pull.rebase = true;
-    };
-  };
+#  programs.git = {
+#    enable = true;
+#    userName = "Liyi Huang";
+#    userEmail = "pdshly@gmail.com";
+#
+#    extraConfig = {
+#      color.ui = "auto";
+#      core = {
+#        editor = "vim";
+#        fileMode = false;
+#      };
+#      credential."https://github.com" = {
+#        helper = "!gh auth git-credential";
+#      };
+#      "oh-my-zsh".hide-dirty = 1;
+#      safe.directory = "/work";
+#      init.defaultBranch = "main";
+#      pull.rebase = true;
+#    };
+#  };
 
 
 
@@ -61,6 +60,13 @@ home.file = {
   ".tmux.conf".source = ./dotfiles/tmux/.tmux.conf;
   ".tmux.conf.local".source = ./dotfiles/tmux/tmux.conf.local;
   ".vim_runtime".source = ./dotfiles/vim_runtime;
+  ".zshrc" = {
+  source = ./dotfiles/zshrc;
+  force = true;
+};
+
+  ".gitconfig".source = ./dotfiles/gitconfig;
+  ".gitignore".source = ./dotfiles/global_gitignore;
 };
 
   programs.vim = {
@@ -82,6 +88,7 @@ home.file = {
 
 
   home.packages = with pkgs; [
+    zsh
     jq
     tmate
     termshark

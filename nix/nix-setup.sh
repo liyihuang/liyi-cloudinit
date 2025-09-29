@@ -4,13 +4,18 @@ set -e
 # Install basic dependencies
 if [ -f /etc/debian_version ]; then
     sudo apt update
-    sudo apt install -y curl xz-utils tar docker.io
+    sudo apt install -y zsh curl xz-utils tar docker.io
+    sudo addgroup --system docker || true
+    sudo usermod -aG docker $USER || true
 elif [ -f /etc/redhat-release ]; then
-    sudo dnf install -y curl xz tar docker
+    sudo dnf install -y zsh curl xz tar docker
+    sudo groupadd --system docker || true
+    sudo usermod -aG docker $USER || true
 fi
 
-sudo addgroup --system docker
-sudo usermod -aG docker $USER
+rm -rf ~/.oh-my-zsh > /dev/null
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+
 
 # Install Nix (single-user)
 sh <(curl -L https://nixos.org/nix/install) --no-daemon
@@ -30,6 +35,6 @@ ln -sf "$(pwd)/config.nix" ~/.config/home-manager/home.nix
 
 # Apply configuration
 home-manager switch
-
 echo "=== Home Manager 25.05 setup complete! ==="
-
+echo "$HOME/.nix-profile/bin/zsh" | sudo tee -a /etc/shells
+sudo chsh -s "$(which zsh)" "$USER"

@@ -1,0 +1,19 @@
+[color]
+    ui = auto
+[core]
+	editor = vim
+    excludesfile = ~/.gitignore
+	fileMode = false
+[user]
+	name = Liyi Huang
+	email = pdshly@gmail.com 
+[credential "https://github.com"]
+	helper = !gh auth git-credential
+[oh-my-zsh]
+	hide-dirty = 1
+[safe]
+	directory = /work
+[init]
+	defaultBranch = main
+[pull]
+	rebase = true
