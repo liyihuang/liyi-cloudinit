@@ -36,5 +36,6 @@ ln -sf "$(pwd)/config.nix" ~/.config/home-manager/home.nix
 # Apply configuration
 home-manager switch
 echo "=== Home Manager 25.05 setup complete! ==="
+echo "=== Change the default shell to zsh ==="
 echo "$HOME/.nix-profile/bin/zsh" | sudo tee -a /etc/shells
 sudo chsh -s "$(which zsh)" "$USER"

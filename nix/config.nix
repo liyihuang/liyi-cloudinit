@@ -57,8 +57,9 @@
 
 home.file = {
   ".tmux.conf".source = ./dotfiles/tmux/.tmux.conf;
-  ".tmux.conf.local".source = ./dotfiles/tmux/tmux.conf.local;
+  ".tmux.conf.local".source = ./dotfiles/tmux.conf.local;
   ".vim_runtime".source = ./dotfiles/vim_runtime;
+  ".vim_runtime.local".source = ./dotfiles/my_configs.vim;
   ".zshrc" = {
   source = ./dotfiles/zshrc;
   force = true;
@@ -68,23 +69,19 @@ home.file = {
   ".gitignore".source = ./dotfiles/global_gitignore;
 };
 
-  programs.vim = {
-    enable = true;
-    
-    extraConfig = ''
-      set runtimepath+=~/.vim_runtime
-      
-      source ~/.vim_runtime/vimrcs/basic.vim
-      source ~/.vim_runtime/vimrcs/filetypes.vim
-      source ~/.vim_runtime/vimrcs/plugins_config.vim
-      source ~/.vim_runtime/vimrcs/extended.vim
-      try
-        source ~/.vim_runtime/my_configs.vim
-      catch
-      endtry
-    '';
-  };
+programs.vim = {
+  enable = true;
 
+  extraConfig = ''
+    set runtimepath+=~/.vim_runtime
+
+    source ~/.vim_runtime/vimrcs/basic.vim
+    source ~/.vim_runtime/vimrcs/filetypes.vim
+    source ~/.vim_runtime/vimrcs/plugins_config.vim
+    source ~/.vim_runtime/vimrcs/extended.vim
+    source ~/.vim_runtime.local
+  '';
+};
 
   home.packages = with pkgs; [
     zsh
