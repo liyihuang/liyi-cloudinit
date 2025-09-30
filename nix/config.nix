@@ -55,7 +55,6 @@
 
 
 
-programs.tmux.enable = true;  
 home.file = {
   ".tmux.conf".source = ./dotfiles/tmux/.tmux.conf;
   ".tmux.conf.local".source = ./dotfiles/tmux/tmux.conf.local;
@@ -89,6 +88,7 @@ home.file = {
 
   home.packages = with pkgs; [
     zsh
+    tmux
     jq
     tmate
     termshark
