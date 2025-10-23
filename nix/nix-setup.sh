@@ -4,11 +4,11 @@ set -e
 # Install basic dependencies
 if [ -f /etc/debian_version ]; then
     sudo apt update
-    sudo apt install -y zsh curl xz-utils tar docker.io
+    sudo apt install -y git zsh curl xz-utils tar docker.io
     sudo addgroup --system docker || true
     sudo usermod -aG docker $USER || true
 elif [ -f /etc/redhat-release ]; then
-    sudo dnf install -y zsh curl xz tar docker
+    sudo dnf install -y git zsh curl xz tar docker
     sudo groupadd --system docker || true
     sudo usermod -aG docker $USER || true
 fi
