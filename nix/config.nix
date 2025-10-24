@@ -87,6 +87,7 @@ programs.vim = {
     zsh
     tmux
     jq
+    yq
     tmate
     termshark
     gnumake
@@ -117,5 +118,7 @@ programs.vim = {
     cilium-cli
     hubble
     terraform  
+    awscli2
+    google-cloud-sdk
   ];
 }

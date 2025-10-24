@@ -107,7 +107,9 @@ source ~/liyi-cloudinit/nix/dotfiles/kube-ps1/.kube-ps1.sh
 PROMPT='$(kube_ps1)'$PROMPT 
 
 
+source <(fzf --zsh)
 
+eval "$(atuin init zsh --disable-up-arrow)"
 alias cilium_helm_install='helm upgrade -n kube-system cilium-enterprise isovalent/cilium-enterprise --version 1.13.3'
 alias cilium_command=' kubectl -n kube-system exec ds/cilium -- cilium'
 alias cilium_restart='kubectl rollout restart deployment cilium-operator -n kube-system; kubectl rollout restart ds/cilium -n kube-system'
