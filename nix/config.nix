@@ -113,7 +113,7 @@ programs.vim = {
     kubectl
     kubectx
     kubecm
-    helm
+    kubernetes-helm
     kind
     cilium-cli
     hubble
