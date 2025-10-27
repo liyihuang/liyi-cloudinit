@@ -96,9 +96,10 @@ programs.vim = {
     gh
     fzf
     atuin
+    lazygit
     tree
-    
-
+    # install docker client from nix
+    docker
     # GUI over SSH
     openbox
     xorg.libX11
@@ -120,5 +121,8 @@ programs.vim = {
     terraform  
     awscli2
     google-cloud-sdk
+    # cilium dev
+    golangci-lint
+    llvmPackages.clangUseLLVM
   ];
 }
