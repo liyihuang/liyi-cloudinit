@@ -19,8 +19,6 @@ ZSH_THEME="simple"
 
 ZSH_TMUX_AUTOSTART=true
 ZSH_TMUX_AUTOQUIT=false
-if [ "$TMUX" = "" ]; then exec tmux; fi
-
 #eval "$(zellij setup --generate-auto-start zsh)"
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -81,8 +79,8 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-source $ZSH/oh-my-zsh.sh
 plugins=(git kubectl tmux fzf) 
+source $ZSH/oh-my-zsh.sh
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -106,14 +104,17 @@ plugins=(git kubectl tmux fzf)
 autoload bashcompinit
 bashcompinit
 
+# kube-ps1 config
 source ~/liyi-cloudinit/nix/dotfiles/kube-ps1/.kube-ps1.sh
 PROMPT='$(kube_ps1)'$PROMPT 
 
 
-
+# fzf config
 source <(fzf --zsh)
 
+# atuin config
 eval "$(atuin init zsh --disable-up-arrow)"
+
 alias cilium_helm_install='helm upgrade -n kube-system cilium-enterprise isovalent/cilium-enterprise --version 1.13.3'
 alias cilium_command=' kubectl -n kube-system exec ds/cilium -- cilium'
 alias cilium_restart='kubectl rollout restart deployment cilium-operator -n kube-system; kubectl rollout restart ds/cilium -n kube-system'
@@ -121,4 +122,5 @@ alias cilium_agent_log='kubectl logs -l app.kubernetes.io/name=cilium-agent -n k
 alias cilium_operator_log='kubectl logs -l app.kubernetes.io/name=cilium-operator -n kube-system --tail=999'
 alias nginx_deployment='kubectl create deployment nginx --image=nginx --replicas=10'
 alias kn='kubectl -n kube-system'
+alias kno='kubectl -n kube-system -o wide'
 alias keof='cat <<EOF | kubectl apply -f -'
