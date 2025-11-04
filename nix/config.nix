@@ -58,8 +58,7 @@
 home.file = {
   ".tmux.conf".source = ./dotfiles/tmux/.tmux.conf;
   ".tmux.conf.local".source = ./dotfiles/tmux.conf.local;
-  ".vim_runtime".source = ./dotfiles/vim_runtime;
-  ".vim_runtime.local".source = ./dotfiles/my_configs.vim;
+  ".config/nvim".source = ./dotfiles/lazyvim;
   ".zshrc" = {
   source = ./dotfiles/zshrc;
   force = true;
@@ -82,7 +81,6 @@ programs.vim = {
     source ~/.vim_runtime.local
   '';
 };
-
   home.packages = with pkgs; [
     zsh
     tmux
