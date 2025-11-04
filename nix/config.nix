@@ -70,7 +70,7 @@ home.file = {
 };
 
 programs.vim = {
-  enable = true;
+  enable = false;
 
   extraConfig = ''
     set runtimepath+=~/.vim_runtime
@@ -92,12 +92,16 @@ programs.vim = {
     termshark
     gnumake
     go
-    pulumi
     gh
     fzf
     atuin
     lazygit
     tree
+    tree-sitter
+    ripgrep
+    neovim
+    fd
+
     # install docker client from nix
     docker
     # GUI over SSH
