@@ -3,7 +3,7 @@
 
 # Path to your oh-my-zsh installation.
 export ZSH="${HOME}/.oh-my-zsh"
-export EDITOR='vim'
+export EDITOR='nvim'
 export PATH="$HOME/go/bin:$PATH"
 
 # Add Nix to PATH
@@ -124,5 +124,3 @@ alias nginx_deployment='kubectl create deployment nginx --image=nginx --replicas
 alias kn='kubectl -n kube-system'
 alias kno='kubectl -n kube-system -o wide'
 alias keof='cat <<EOF | kubectl apply -f -'
-alias vi='nvim'
-alias vim='nvim'
