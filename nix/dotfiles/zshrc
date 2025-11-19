@@ -124,3 +124,5 @@ alias nginx_deployment='kubectl create deployment nginx --image=nginx --replicas
 alias kn='kubectl -n kube-system'
 alias kno='kubectl -n kube-system -o wide'
 alias keof='cat <<EOF | kubectl apply -f -'
+ulimit -n 65536
+

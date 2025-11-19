@@ -87,9 +87,11 @@ programs.vim = {
     jq
     yq
     tmate
+    htop
     termshark
     gnumake
     go
+    gopls
     gh
     fzf
     atuin
@@ -97,11 +99,12 @@ programs.vim = {
     tree
     tree-sitter
     ripgrep
-    neovim
+    neovim-unwrapped
     fd
 
     # install docker client from nix
     docker
+    docker-buildx
     # GUI over SSH
     openbox
     xorg.libX11
@@ -119,8 +122,11 @@ programs.vim = {
     kubernetes-helm
     kind
     cilium-cli
+    pwru
     hubble
     terraform  
+    terraform-ls
+
     awscli2
     google-cloud-sdk
     # cilium dev
