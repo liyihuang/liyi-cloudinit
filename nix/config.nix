@@ -68,19 +68,6 @@ home.file = {
   ".gitignore".source = ./dotfiles/global_gitignore;
 };
 
-programs.vim = {
-  enable = false;
-
-  extraConfig = ''
-    set runtimepath+=~/.vim_runtime
-
-    source ~/.vim_runtime/vimrcs/basic.vim
-    source ~/.vim_runtime/vimrcs/filetypes.vim
-    source ~/.vim_runtime/vimrcs/plugins_config.vim
-    source ~/.vim_runtime/vimrcs/extended.vim
-    source ~/.vim_runtime.local
-  '';
-};
   home.packages = with pkgs; [
     zsh
     tmux
