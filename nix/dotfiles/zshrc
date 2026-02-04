@@ -118,7 +118,7 @@ eval "$(atuin init zsh --disable-up-arrow)"
 alias cilium_command=' kubectl -n kube-system exec ds/cilium -- cilium'
 alias cilium_restart='kubectl rollout restart deployment cilium-operator -n kube-system; kubectl rollout restart ds/cilium -n kube-system'
 alias nginx_deployment='kubectl create deployment nginx --image=nginx --replicas=10'
-alias netshoot_deployment='kubectl create deployment netshoot --image=nicolaka/netshoot --replicas=1'
+alias netshoot_deployment='kubectl create deployment netshoot --image=nicolaka/netshoot -- /bin/sh -c "sleep infinity"'
 alias kn='kubectl -n kube-system'
 alias kno='kubectl -n kube-system -o wide'
 alias keof='cat <<EOF | kubectl apply -f -'
