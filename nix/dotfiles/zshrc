@@ -111,7 +111,6 @@ PROMPT='$(kube_ps1)'$PROMPT
 
 # fzf config
 source <(fzf --zsh)
-
 # atuin config
 eval "$(atuin init zsh --disable-up-arrow)"
 
@@ -123,4 +122,4 @@ alias kn='kubectl -n kube-system'
 alias kno='kubectl -n kube-system -o wide'
 alias keof='cat <<EOF | kubectl apply -f -'
 ulimit -n 65536
-
+export PATH="/home/liyih/.local/bin:$PATH"

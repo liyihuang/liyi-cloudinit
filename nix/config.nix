@@ -3,7 +3,7 @@
   nixpkgs.config.allowUnfree = true;
   home.username = builtins.getEnv "USER";
   home.homeDirectory = builtins.getEnv "HOME";
-  home.stateVersion = "25.05";
+  home.stateVersion = "26.05";
   
 #  programs.zsh = {
 #    enable = true;
@@ -56,16 +56,30 @@
 
 
 home.file = {
-  ".tmux.conf".source = ./dotfiles/tmux/.tmux.conf;
-  ".tmux.conf.local".source = ./dotfiles/tmux.conf.local;
-  ".config/nvim".source = ./dotfiles/lazyvim;
+  ".tmux.conf" = {
+    source = ./dotfiles/tmux/.tmux.conf;
+    force = true;
+  };
+  ".tmux.conf.local" = {
+    source = ./dotfiles/tmux.conf.local;
+    force = true;
+  };
+  ".config/nvim" = {
+    source = ./dotfiles/lazyvim;
+    force = true;
+  };
   ".zshrc" = {
-  source = ./dotfiles/zshrc;
-  force = true;
-};
-
-  ".gitconfig".source = ./dotfiles/gitconfig;
-  ".gitignore".source = ./dotfiles/global_gitignore;
+    source = ./dotfiles/zshrc;
+    force = true;
+  };
+  ".gitconfig" = {
+    source = ./dotfiles/gitconfig;
+    force = true;
+  };
+  ".gitignore" = {
+    source = ./dotfiles/global_gitignore;
+    force = true;
+  };
 };
 
   home.packages = with pkgs; [
@@ -94,13 +108,13 @@ home.file = {
     docker-buildx
     # GUI over SSH
     openbox
-    xorg.libX11
-    xorg.libXext
-    xorg.libXrender
-    xorg.xauth
-    xorg.xinit
-    xorg.xclock
-    xorg.xeyes
+    libx11
+    libxext
+    libxrender
+    xauth
+    xinit
+    xclock
+    xeyes
 
     # Kubernetes & tooling
     kubectl
@@ -119,5 +133,10 @@ home.file = {
     # cilium dev
     golangci-lint
     llvmPackages.clangUseLLVM
+    codex
+    antigravity
+    claude-code
+    glow
+    uv
   ];
 }
