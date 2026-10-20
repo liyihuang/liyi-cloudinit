@@ -122,8 +122,20 @@ alias kn='kubectl -n kube-system'
 alias kno='kubectl -n kube-system -o wide'
 alias keof='cat <<EOF | kubectl apply -f -'
 
-# claude 个人账号 profile:独立的配置目录/凭证,不带公司 Bedrock 的 env(见 ~/.claude/settings.json)
-alias claude-personal='CLAUDE_CONFIG_DIR="$HOME/.claude-personal" claude'
+# claude 个人账号 profile:独立的配置目录/凭证,不带公司 Bedrock 的 env
+# 注意:~/.zshenv 里全局 export 了 Bedrock 相关变量,子进程会继承,
+# 仅设置 CLAUDE_CONFIG_DIR 不够,必须显式 unset 掉才能触发 /login 走 claude.ai
+alias claude-personal='env -u CLAUDE_CODE_USE_BEDROCK -u AWS_ACCESS_KEY_ID -u AWS_SECRET_ACCESS_KEY -u AWS_REGION -u NODE_EXTRA_CA_CERTS -u ANTHROPIC_MODEL -u ANTHROPIC_DEFAULT_SONNET_MODEL -u ANTHROPIC_DEFAULT_OPUS_MODEL -u ANTHROPIC_DEFAULT_HAIKU_MODEL -u ANTHROPIC_DEFAULT_FABLE_MODEL CLAUDE_CONFIG_DIR="$HOME/.claude-personal" claude'
 
 ulimit -n 65536
-export PATH="/home/liyih/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+
+# >>> grok installer >>>
+export PATH="$HOME/.grok/bin:$PATH"
+fpath=(~/.grok/completions/zsh $fpath)
+autoload -Uz compinit && compinit -C
+# <<< grok installer <<<
+
+if [[ -x "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser" ]]; then
+  alias brave-proxy="/Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --user-data-dir=/tmp/brave_proxy --proxy-server=socks5://127.0.0.1:10808 &"
+fi

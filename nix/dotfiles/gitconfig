@@ -4,6 +4,7 @@
 	editor = nvim
     excludesfile = ~/.gitignore
 	fileMode = false
+	quotepath = false
 [user]
 	name = Liyi Huang
 	email = pdshly@gmail.com 
