@@ -1,6 +1,7 @@
 { pkgs, ... }:
 {
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.permittedInsecurePackages = [ "tmate-unstable-2022-08-07" ];
   home.username = builtins.getEnv "USER";
   home.homeDirectory = builtins.getEnv "HOME";
   home.stateVersion = "26.05";

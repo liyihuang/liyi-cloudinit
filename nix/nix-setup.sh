@@ -22,8 +22,8 @@ sh <(curl -L https://nixos.org/nix/install) --no-daemon
 # Load Nix profile
 . "$HOME/.nix-profile/etc/profile.d/nix.sh"
 
-# Pin Nixpkgs to 26.05
-nix-channel --add https://nixos.org/channels/nixos-26.05 nixpkgs
+# Track Nixpkgs unstable
+nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs
 nix-channel --update
 
 nix-env -iA nixpkgs.home-manager
@@ -34,7 +34,7 @@ ln -sf "$(pwd)/config.nix" ~/.config/home-manager/home.nix
 
 # Apply configuration
 home-manager switch
-echo "=== Home Manager 26.05 setup complete! ==="
+echo "=== Home Manager (unstable) setup complete! ==="
 echo "=== Change the default shell to zsh ==="
 echo "$HOME/.nix-profile/bin/zsh" | sudo tee -a /etc/shells
 sudo chsh -s "$(which zsh)" "$USER"
