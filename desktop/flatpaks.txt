@@ -1,0 +1,7 @@
+# Flatpak apps to install from Flathub, one app ID per line.
+# Blank lines and lines starting with # are ignored.
+md.obsidian.Obsidian
+com.google.Chrome
+com.discordapp.Discord
+com.spotify.Client
+com.rustdesk.RustDesk

@@ -6,36 +6,27 @@ It is intentionally separated from `nix/nix-setup.sh` so that headless and serve
 
 ## Usage
 
-### Full Desktop Setup (Desktop Environment + Flatpak)
-On a fresh machine or server without a desktop:
 ```bash
 ./desktop/desktop-setup.sh
 ```
-This will:
+No arguments are needed. The script is safe to re-run on a machine that already has a desktop; it skips anything already installed. It will:
 1. Detect if a desktop is installed (installs GNOME + GDM if none is present).
 2. Configure GDM to use Xorg if an NVIDIA GPU is detected.
 3. Install **Flatpak** and the **GNOME Software Flatpak plugin**.
 4. Configure the **Flathub** repository.
-
-### Flatpak Only (on existing desktop)
-If a desktop environment is already installed:
-```bash
-./desktop/desktop-setup.sh --flatpak-only
-```
+5. Install every app listed in `flatpaks.txt` (skipping ones already installed).
+6. Install **snapd**, then every snap listed in `snaps.txt` (skipping ones already installed). Use this only as a fallback for GUI apps that aren't on Flathub, e.g. `ghostty --classic`. Prefer Flatpak, then the distro's own package, then snap.
 
 ## Managing GUI Apps via Flatpak
 
-Once installed, you can search and install GUI applications from the terminal or graphically via GNOME Software.
+The desired app set lives in `flatpaks.txt` (one Flathub app ID per line, `#` for comments). Add or remove IDs there and re-run `./desktop/desktop-setup.sh` to apply additions.
 
 ```bash
 # Search for apps
 flatpak search <name>
 
-# Install an app from Flathub
-flatpak install flathub md.obsidian.Obsidian
-flatpak install flathub com.google.Chrome
-flatpak install flathub com.discordapp.Discord
-flatpak install flathub com.spotify.Client
+# Ad-hoc install (add the ID to flatpaks.txt to make it permanent)
+flatpak install flathub <app-id>
 
 # Run an app
 flatpak run <app-id>

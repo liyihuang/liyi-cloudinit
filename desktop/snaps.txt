@@ -1,0 +1,4 @@
+# Fallback snap apps, for GUI apps that aren't on Flathub. One per line:
+#   <snap-name> [extra snap install flags]
+# Blank lines and lines starting with # are ignored.
+ghostty --classic

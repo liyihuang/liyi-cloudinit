@@ -5,39 +5,27 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "=== Desktop & GUI App Manager Setup ==="
 
-# Parse arguments
-INSTALL_DESKTOP=true
-for arg in "$@"; do
-  case "$arg" in
-    --flatpak-only)
-      INSTALL_DESKTOP=false
-      ;;
-  esac
-done
-
 # 1. Desktop Environment (installed only when needed on headless systems)
-if [ "$INSTALL_DESKTOP" = true ]; then
-  if [ -f /etc/debian_version ]; then
-    if ! dpkg -s gnome-shell &>/dev/null && ! dpkg -s xfce4-session &>/dev/null; then
-      echo "No desktop environment detected. Installing GNOME desktop (gdm3, ubuntu-session, gnome-shell)..."
-      sudo apt update
-      sudo apt install -y gdm3 ubuntu-session gnome-shell
-    else
-      echo "Desktop environment is already installed."
-    fi
+if [ -f /etc/debian_version ]; then
+  if ! dpkg -s gnome-shell &>/dev/null && ! dpkg -s xfce4-session &>/dev/null; then
+    echo "No desktop environment detected. Installing GNOME desktop (gdm3, ubuntu-session, gnome-shell)..."
+    sudo apt update
+    sudo apt install -y gdm3 ubuntu-session gnome-shell
+  else
+    echo "Desktop environment is already installed."
+  fi
 
-    # Configure GDM for NVIDIA compatibility if NVIDIA GPU is detected
-    if lspci 2>/dev/null | grep -qi nvidia && [ -f /etc/gdm3/custom.conf ]; then
-      if ! grep -q "^WaylandEnable=false" /etc/gdm3/custom.conf; then
-        echo "Configuring GDM to use Xorg for NVIDIA compatibility..."
-        sudo sed -i 's/^#WaylandEnable=false/WaylandEnable=false/' /etc/gdm3/custom.conf
-      fi
+  # Configure GDM for NVIDIA compatibility if NVIDIA GPU is detected
+  if lspci 2>/dev/null | grep -qi nvidia && [ -f /etc/gdm3/custom.conf ]; then
+    if ! grep -q "^WaylandEnable=false" /etc/gdm3/custom.conf; then
+      echo "Configuring GDM to use Xorg for NVIDIA compatibility..."
+      sudo sed -i 's/^#WaylandEnable=false/WaylandEnable=false/' /etc/gdm3/custom.conf
     fi
-  elif [ -f /etc/redhat-release ]; then
-    if ! rpm -q gnome-shell &>/dev/null; then
-      echo "Installing GNOME desktop on RedHat/Fedora..."
-      sudo dnf groupinstall -y "Server with GUI" || sudo dnf groupinstall -y "GNOME Desktop"
-    fi
+  fi
+elif [ -f /etc/redhat-release ]; then
+  if ! rpm -q gnome-shell &>/dev/null; then
+    echo "Installing GNOME desktop on RedHat/Fedora..."
+    sudo dnf groupinstall -y "Server with GUI" || sudo dnf groupinstall -y "GNOME Desktop"
   fi
 fi
 
@@ -85,13 +73,54 @@ fi
 # 4. Prepare Flatpak user export directory
 mkdir -p "$HOME/.local/share/flatpak/exports/share/applications"
 
+# 5. Install apps listed in flatpaks.txt
+MANIFEST="$SCRIPT_DIR/flatpaks.txt"
+if command -v flatpak &>/dev/null && [ -f "$MANIFEST" ]; then
+  echo "=== Installing Flatpak apps from flatpaks.txt ==="
+  while IFS= read -r app || [ -n "$app" ]; do
+    app="${app%%#*}"
+    app="$(echo "$app" | xargs)"
+    [ -z "$app" ] && continue
+    if flatpak info "$app" &>/dev/null; then
+      echo "$app is already installed."
+    else
+      echo "Installing $app..."
+      flatpak install -y --noninteractive flathub "$app" || echo "WARNING: failed to install $app"
+    fi
+  done < "$MANIFEST"
+fi
+
+# 6. Install snapd and the fallback snaps listed in snaps.txt (apps not available on Flathub)
+echo "=== Installing Snap ==="
+if ! command -v snap &>/dev/null; then
+  if [ -f /etc/debian_version ]; then
+    sudo apt update
+    sudo apt install -y snapd
+  elif [ -f /etc/redhat-release ]; then
+    echo "WARNING: snapd is not in the default Fedora/RHEL repositories; skipping snaps."
+  fi
+else
+  echo "Snap is already installed."
+fi
+
+SNAP_MANIFEST="$SCRIPT_DIR/snaps.txt"
+if command -v snap &>/dev/null && [ -f "$SNAP_MANIFEST" ]; then
+  echo "=== Installing snaps from snaps.txt ==="
+  while IFS= read -r line || [ -n "$line" ]; do
+    line="${line%%#*}"
+    line="$(echo "$line" | xargs)"
+    [ -z "$line" ] && continue
+    read -r -a snap_args <<< "$line"
+    if snap list "${snap_args[0]}" &>/dev/null; then
+      echo "${snap_args[0]} is already installed."
+    else
+      echo "Installing ${snap_args[0]}..."
+      sudo snap install "${snap_args[@]}" || echo "WARNING: failed to install ${snap_args[0]}"
+    fi
+  done < "$SNAP_MANIFEST"
+fi
+
 echo ""
 echo "=== Desktop & Flatpak setup complete! ==="
-echo "You can now install GUI applications using Flatpak:"
-echo "  flatpak install flathub <app-id>"
-echo ""
-echo "Examples:"
-echo "  flatpak install flathub md.obsidian.Obsidian"
-echo "  flatpak install flathub com.google.Chrome"
-echo "  flatpak install flathub com.discordapp.Discord"
-echo "  flatpak install flathub com.spotify.Client"
+echo "Apps are managed in desktop/flatpaks.txt; re-run this script to install new entries."
+echo "Ad-hoc install: flatpak install flathub <app-id>"
