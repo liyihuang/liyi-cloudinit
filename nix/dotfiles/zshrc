@@ -137,5 +137,6 @@ autoload -Uz compinit && compinit -C
 # <<< grok installer <<<
 
 if [[ -x "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser" ]]; then
-  alias brave-proxy="/Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --user-data-dir=/tmp/brave_proxy --proxy-server=socks5://127.0.0.1:10808 &"
+  alias brave-proxy="/Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --incognito --user-data-dir=/tmp/brave_proxy --proxy-server=socks5://192.168.2.210:30808 &"
 fi
+eval "$(direnv hook zsh)"
