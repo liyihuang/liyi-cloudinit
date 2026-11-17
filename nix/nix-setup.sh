@@ -69,8 +69,9 @@ fi
 # Track Nixpkgs unstable
 if ! nix-channel --list | grep -q 'nixpkgs-unstable'; then
   nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs
-  nix-channel --update
 fi
+# Always refresh so re-runs pick up the latest unstable
+nix-channel --update
 
 # Install Home Manager if not present
 if ! command -v home-manager &>/dev/null; then
